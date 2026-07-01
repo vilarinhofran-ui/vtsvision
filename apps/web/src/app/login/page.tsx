@@ -18,19 +18,8 @@ export default function LoginPage() {
   const [senha, setSenha] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [registrationSuccess, setRegistrationSuccess] = useState(() => {
-    if (typeof window === "undefined") return false;
-    const query = new URLSearchParams(window.location.search);
-    return query.get("registered") === "1";
-  });
-  const [nextPath, setNextPath] = useState(() => {
-    if (typeof window === "undefined") return "/importar";
-    const query = new URLSearchParams(window.location.search);
-    const requestedPath = query.get("next");
-    return requestedPath && requestedPath.startsWith("/")
-      ? requestedPath
-      : "/importar";
-  });
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [nextPath, setNextPath] = useState("/importar");
 
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
