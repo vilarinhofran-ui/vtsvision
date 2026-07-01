@@ -1,15 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Cable, Database, FileSpreadsheet, Link2, LogOut } from "lucide-react";
+import { Cable, Database, FileSpreadsheet, Link2 } from "lucide-react";
 import { getSupabaseClient } from "../../lib/supabase";
 import { useProtectedUser } from "../../lib/use-protected-user";
 import { clearDemoAccess } from "../../lib/auth-session";
+import { AppTopNav } from "../../components/app-top-nav";
 
 export default function ImportarPage() {
   const router = useRouter();
   const { user, loading, configError } = useProtectedUser();
+  const [integrationInfo, setIntegrationInfo] = useState("");
 
   async function handleSignOut() {
     try {
@@ -45,17 +48,7 @@ export default function ImportarPage() {
 
   return (
     <main className="mx-auto min-h-screen w-full max-w-5xl px-6 py-14">
-      <section className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm font-semibold text-slate-600">
-          Conta ativa: {user?.email ?? "usuario autenticado"}
-        </p>
-        <button
-          onClick={handleSignOut}
-          className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700"
-        >
-          <LogOut size={14} /> Sair
-        </button>
-      </section>
+      <AppTopNav userEmail={user?.email} onSignOut={handleSignOut} />
 
       <section className="vts-card p-8">
         <h1 className="vts-title text-3xl font-bold">Importar dados</h1>
@@ -88,7 +81,14 @@ export default function ImportarPage() {
             <p className="mt-2 text-sm text-slate-600">
               Fluxo preparado para integracao com sua conta.
             </p>
-            <button className="mt-4 rounded-xl border border-[#009DFF] px-4 py-2 text-sm font-semibold text-[#003C8F]">
+            <button
+              className="mt-4 rounded-xl border border-[#009DFF] px-4 py-2 text-sm font-semibold text-[#003C8F]"
+              onClick={() =>
+                setIntegrationInfo(
+                  "Google Sheets conectado em modo demo. Proxima etapa: escolher a planilha e atualizar dados.",
+                )
+              }
+            >
               Conectar conta
             </button>
           </article>
@@ -101,7 +101,14 @@ export default function ImportarPage() {
             <p className="mt-2 text-sm text-slate-600">
               Envie dados de ERP ou CRM por endpoint seguro.
             </p>
-            <button className="mt-4 rounded-xl border border-[#009DFF] px-4 py-2 text-sm font-semibold text-[#003C8F]">
+            <button
+              className="mt-4 rounded-xl border border-[#009DFF] px-4 py-2 text-sm font-semibold text-[#003C8F]"
+              onClick={() =>
+                setIntegrationInfo(
+                  `Token demo gerado para ${user?.email ?? "cliente"}: vts_demo_${Date.now().toString().slice(-6)}`,
+                )
+              }
+            >
               Gerar token
             </button>
           </article>
@@ -114,11 +121,24 @@ export default function ImportarPage() {
             <p className="mt-2 text-sm text-slate-600">
               Fluxo preparado para PostgreSQL e outros bancos SQL.
             </p>
-            <button className="mt-4 rounded-xl border border-[#009DFF] px-4 py-2 text-sm font-semibold text-[#003C8F]">
+            <button
+              className="mt-4 rounded-xl border border-[#009DFF] px-4 py-2 text-sm font-semibold text-[#003C8F]"
+              onClick={() =>
+                setIntegrationInfo(
+                  "Conexao de banco iniciada. Informe host, porta, usuario e senha para concluir.",
+                )
+              }
+            >
               Configurar conexao
             </button>
           </article>
         </div>
+
+        {integrationInfo && (
+          <p className="mt-5 rounded-xl bg-[#E8F6FF] px-4 py-3 text-sm text-[#003C8F]">
+            {integrationInfo}
+          </p>
+        )}
       </section>
     </main>
   );

@@ -3,7 +3,6 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as XLSX from "xlsx";
 import {
@@ -33,6 +32,7 @@ import {
 import { getSupabaseClient } from "../../lib/supabase";
 import { useProtectedUser } from "../../lib/use-protected-user";
 import { clearDemoAccess } from "../../lib/auth-session";
+import { AppTopNav } from "../../components/app-top-nav";
 
 type RawRow = Record<string, unknown>;
 type ProcessedRow = {
@@ -474,56 +474,7 @@ export default function DashboardPage() {
         </p>
       </section>
 
-      <section className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-slate-500">
-          Ambiente seguro com sessao protegida
-        </p>
-        <button
-          onClick={handleSignOut}
-          className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700"
-        >
-          <LogOut size={14} /> Sair
-        </button>
-      </section>
-
-      <section className="mb-6 flex flex-wrap gap-2">
-        <Link
-          href="/insights"
-          className="rounded-full border border-[#009DFF] bg-white px-4 py-2 text-xs font-semibold text-[#003C8F]"
-        >
-          Insights
-        </Link>
-        <Link
-          href="/analista"
-          className="rounded-full border border-[#009DFF] bg-white px-4 py-2 text-xs font-semibold text-[#003C8F]"
-        >
-          Analista Virtual
-        </Link>
-        <Link
-          href="/alertas"
-          className="rounded-full border border-[#009DFF] bg-white px-4 py-2 text-xs font-semibold text-[#003C8F]"
-        >
-          Alertas
-        </Link>
-        <Link
-          href="/benchmark"
-          className="rounded-full border border-[#009DFF] bg-white px-4 py-2 text-xs font-semibold text-[#003C8F]"
-        >
-          Benchmark
-        </Link>
-        <Link
-          href="/retencao"
-          className="rounded-full border border-[#009DFF] bg-white px-4 py-2 text-xs font-semibold text-[#003C8F]"
-        >
-          Relatorio mensal
-        </Link>
-        <Link
-          href="/admin"
-          className="rounded-full border border-[#009DFF] bg-white px-4 py-2 text-xs font-semibold text-[#003C8F]"
-        >
-          Admin
-        </Link>
-      </section>
+      <AppTopNav userEmail={user?.email} onSignOut={handleSignOut} />
 
       <section className="vts-glass rounded-3xl p-8">
         <p className="text-xs font-semibold uppercase tracking-wide text-[#003C8F]">

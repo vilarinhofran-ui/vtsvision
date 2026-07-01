@@ -1,7 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { AUTH_COOKIE_NAME, ROLE_COOKIE_NAME } from "./lib/auth-session";
 
-const protectedPrefixes = ["/dashboard", "/importar", "/insights", "/admin"];
+const protectedPrefixes = [
+  "/dashboard",
+  "/importar",
+  "/insights",
+  "/analista",
+  "/alertas",
+  "/benchmark",
+  "/retencao",
+  "/admin",
+];
 
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;

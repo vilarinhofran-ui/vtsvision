@@ -14,6 +14,7 @@ export default function AssinaturaPage() {
   const [gateway, setGateway] = useState<Gateway>("stripe");
   const [metodo, setMetodo] = useState<Metodo>("pix");
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("");
 
   const planoEscolhido = useMemo(
     () => planos.find((item) => item.nome === plano) ?? planos[1],
@@ -34,8 +35,10 @@ export default function AssinaturaPage() {
           metodo,
         }),
       });
+      setStatus("Assinatura ativada com sucesso.");
     } catch {
       // segue fluxo local
+      setStatus("API indisponivel. Assinatura simulada em modo demo.");
     } finally {
       setLoading(false);
       router.push("/importar");
@@ -117,6 +120,12 @@ export default function AssinaturaPage() {
         >
           {loading ? "Ativando..." : "Ativar e continuar"}
         </button>
+
+        {status && (
+          <p className="rounded-xl bg-[#E8F6FF] px-4 py-2 text-sm text-[#003C8F] md:col-span-2">
+            {status}
+          </p>
+        )}
       </section>
 
       <Link

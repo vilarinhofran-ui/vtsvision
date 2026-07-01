@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, Bot, LogOut, TrendingUp } from "lucide-react";
+import { ArrowRight, Bot, TrendingUp } from "lucide-react";
 import { getSupabaseClient } from "../../lib/supabase";
 import { useProtectedUser } from "../../lib/use-protected-user";
 import { clearDemoAccess } from "../../lib/auth-session";
+import { AppTopNav } from "../../components/app-top-nav";
 
 const insights = [
   "Seu faturamento aumentou 12% no periodo analisado.",
@@ -17,6 +19,8 @@ const insights = [
 export default function InsightsPage() {
   const router = useRouter();
   const { user, loading, configError } = useProtectedUser();
+  const [insightsAtivos, setInsightsAtivos] = useState(insights);
+  const [status, setStatus] = useState("");
 
   async function handleSignOut() {
     try {
@@ -52,17 +56,7 @@ export default function InsightsPage() {
 
   return (
     <main className="mx-auto min-h-screen w-full max-w-5xl px-6 py-14">
-      <section className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm font-semibold text-slate-600">
-          Conta ativa: {user?.email ?? "usuario autenticado"}
-        </p>
-        <button
-          onClick={handleSignOut}
-          className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700"
-        >
-          <LogOut size={14} /> Sair
-        </button>
-      </section>
+      <AppTopNav userEmail={user?.email} onSignOut={handleSignOut} />
 
       <section className="vts-card p-8">
         <div className="flex items-center gap-2 text-[#003C8F]">
@@ -79,7 +73,7 @@ export default function InsightsPage() {
         </p>
 
         <div className="mt-6 space-y-3">
-          {insights.map((insight) => (
+          {insightsAtivos.map((insight) => (
             <article
               key={insight}
               className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-700"
@@ -88,6 +82,23 @@ export default function InsightsPage() {
             </article>
           ))}
         </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            setInsightsAtivos((prev) => [prev[1], prev[2], prev[3], prev[0]]);
+            setStatus("Insights atualizados com base nos dados mais recentes.");
+          }}
+          className="mt-5 rounded-xl border border-[#009DFF] px-4 py-2 text-sm font-semibold text-[#003C8F]"
+        >
+          Atualizar insights
+        </button>
+
+        {status && (
+          <p className="mt-3 rounded-xl bg-[#E8F6FF] px-4 py-2 text-sm text-[#003C8F]">
+            {status}
+          </p>
+        )}
 
         <div className="mt-6 flex flex-wrap gap-3">
           <Link

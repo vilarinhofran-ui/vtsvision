@@ -1,6 +1,11 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import { getSupabaseClient } from "../../lib/supabase";
+import { useProtectedUser } from "../../lib/use-protected-user";
+import { clearDemoAccess } from "../../lib/auth-session";
+import { AppTopNav } from "../../components/app-top-nav";
 
 type AnalystResponse = {
   resumoExecutivo: string;
@@ -11,9 +16,43 @@ type AnalystResponse = {
 };
 
 export default function AnalistaPage() {
+  const router = useRouter();
+  const { user, loading: sessionLoading, configError } = useProtectedUser();
   const [pergunta, setPergunta] = useState("");
   const [loading, setLoading] = useState(false);
   const [resposta, setResposta] = useState<AnalystResponse | null>(null);
+
+  async function handleSignOut() {
+    try {
+      const supabase = getSupabaseClient();
+      await supabase.auth.signOut();
+    } catch {
+      // Em modo demo sem Supabase, apenas limpa a sessao local.
+    } finally {
+      clearDemoAccess();
+      router.push("/login");
+    }
+  }
+
+  if (sessionLoading) {
+    return (
+      <main className="mx-auto min-h-screen w-full max-w-4xl px-6 py-12">
+        <section className="vts-card p-8 text-sm text-slate-600">
+          Validando sua sessao...
+        </section>
+      </main>
+    );
+  }
+
+  if (configError) {
+    return (
+      <main className="mx-auto min-h-screen w-full max-w-4xl px-6 py-12">
+        <section className="vts-card p-8 text-sm text-red-700">
+          {configError}
+        </section>
+      </main>
+    );
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -68,6 +107,8 @@ export default function AnalistaPage() {
 
   return (
     <main className="mx-auto min-h-screen w-full max-w-4xl px-6 py-12">
+      <AppTopNav userEmail={user?.email} onSignOut={handleSignOut} />
+
       <section className="vts-card p-8">
         <p className="text-xs font-semibold uppercase tracking-wide text-[#003C8F]">
           Analista Virtual VTS Vision
@@ -95,6 +136,19 @@ export default function AnalistaPage() {
             {loading ? "Analisando..." : "Perguntar"}
           </button>
         </form>
+
+        {resposta && (
+          <button
+            type="button"
+            onClick={() => {
+              setResposta(null);
+              setPergunta("");
+            }}
+            className="mt-4 rounded-xl border border-[#009DFF] px-4 py-2 text-sm font-semibold text-[#003C8F]"
+          >
+            Limpar resposta
+          </button>
+        )}
       </section>
 
       {resposta && (
