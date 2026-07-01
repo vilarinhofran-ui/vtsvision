@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { LogOut } from "lucide-react";
 
 type AppTopNavProps = {
@@ -22,6 +23,11 @@ const menu = [
 
 export function AppTopNav({ userEmail, onSignOut }: AppTopNavProps) {
   const pathname = usePathname();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   return (
     <header className="mb-5 space-y-3">
@@ -41,7 +47,7 @@ export function AppTopNav({ userEmail, onSignOut }: AppTopNavProps) {
 
       <nav className="flex flex-wrap gap-2">
         {menu.map((item) => {
-          const active = pathname === item.href;
+          const active = isClient && pathname === item.href;
           return (
             <Link
               key={item.href}
