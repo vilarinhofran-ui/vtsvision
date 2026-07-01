@@ -6,7 +6,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Lock, Mail } from "lucide-react";
 import { getSupabaseClient } from "../../lib/supabase";
-import { setAuthCookie } from "../../lib/auth-session";
+import {
+  clearDemoAccess,
+  setAuthCookie,
+  setDemoAccess,
+} from "../../lib/auth-session";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -55,6 +59,7 @@ export default function LoginPage() {
         return;
       }
 
+      clearDemoAccess();
       setAuthCookie();
       router.push(nextPath);
     } catch {
@@ -64,6 +69,23 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  function handleDemoAccess(role: "admin" | "cliente") {
+    setErrorMessage("");
+    setDemoAccess(role);
+
+    if (role === "admin") {
+      router.push("/admin");
+      return;
+    }
+
+    if (nextPath.startsWith("/admin")) {
+      router.push("/dashboard");
+      return;
+    }
+
+    router.push(nextPath);
   }
 
   return (
@@ -147,6 +169,23 @@ export default function LoginPage() {
             {loading ? "Entrando..." : "Entrar"}
           </button>
         </form>
+
+        <div className="mt-4 grid gap-2">
+          <button
+            type="button"
+            onClick={() => handleDemoAccess("cliente")}
+            className="w-full rounded-xl border border-[#009DFF] bg-white px-4 py-2 text-sm font-semibold text-[#003C8F]"
+          >
+            Entrar como Cliente Demo
+          </button>
+          <button
+            type="button"
+            onClick={() => handleDemoAccess("admin")}
+            className="w-full rounded-xl border border-[#003C8F] bg-[#003C8F] px-4 py-2 text-sm font-semibold text-white"
+          >
+            Entrar como Admin Demo
+          </button>
+        </div>
 
         <div className="mt-5 flex items-center justify-between text-sm">
           <Link href="/cadastro" className="font-semibold text-[#003C8F]">

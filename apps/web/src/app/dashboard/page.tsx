@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 import { getSupabaseClient } from "../../lib/supabase";
 import { useProtectedUser } from "../../lib/use-protected-user";
-import { clearAuthCookie } from "../../lib/auth-session";
+import { clearDemoAccess } from "../../lib/auth-session";
 
 type RawRow = Record<string, unknown>;
 type ProcessedRow = {
@@ -201,8 +201,10 @@ export default function DashboardPage() {
     try {
       const supabase = getSupabaseClient();
       await supabase.auth.signOut();
+    } catch {
+      // Em modo demo sem Supabase, apenas limpa a sessao local.
     } finally {
-      clearAuthCookie();
+      clearDemoAccess();
       router.push("/login");
     }
   }

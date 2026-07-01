@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Cable, Database, FileSpreadsheet, Link2, LogOut } from "lucide-react";
 import { getSupabaseClient } from "../../lib/supabase";
 import { useProtectedUser } from "../../lib/use-protected-user";
-import { clearAuthCookie } from "../../lib/auth-session";
+import { clearDemoAccess } from "../../lib/auth-session";
 
 export default function ImportarPage() {
   const router = useRouter();
@@ -15,8 +15,10 @@ export default function ImportarPage() {
     try {
       const supabase = getSupabaseClient();
       await supabase.auth.signOut();
+    } catch {
+      // Em modo demo sem Supabase, apenas limpa a sessao local.
     } finally {
-      clearAuthCookie();
+      clearDemoAccess();
       router.push("/login");
     }
   }

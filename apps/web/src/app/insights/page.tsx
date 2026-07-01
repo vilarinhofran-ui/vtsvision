@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowRight, Bot, LogOut, TrendingUp } from "lucide-react";
 import { getSupabaseClient } from "../../lib/supabase";
 import { useProtectedUser } from "../../lib/use-protected-user";
-import { clearAuthCookie } from "../../lib/auth-session";
+import { clearDemoAccess } from "../../lib/auth-session";
 
 const insights = [
   "Seu faturamento aumentou 12% no periodo analisado.",
@@ -22,8 +22,10 @@ export default function InsightsPage() {
     try {
       const supabase = getSupabaseClient();
       await supabase.auth.signOut();
+    } catch {
+      // Em modo demo sem Supabase, apenas limpa a sessao local.
     } finally {
-      clearAuthCookie();
+      clearDemoAccess();
       router.push("/login");
     }
   }

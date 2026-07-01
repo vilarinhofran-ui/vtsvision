@@ -4,7 +4,12 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { getSupabaseClient } from "./supabase";
-import { clearAuthCookie, setAuthCookie } from "./auth-session";
+import {
+  AUTH_COOKIE_NAME,
+  clearAuthCookie,
+  getRoleFromDocument,
+  setAuthCookie,
+} from "./auth-session";
 
 type UseProtectedUserResult = {
   user: User | null;
@@ -26,6 +31,18 @@ export function useProtectedUser(): UseProtectedUserResult {
     let unsubscribe = () => {};
 
     async function checkSession() {
+      const demoRole = getRoleFromDocument();
+      const hasAuthCookie =
+        typeof document !== "undefined" &&
+        document.cookie.includes(`${AUTH_COOKIE_NAME}=1`);
+
+      if (demoRole && hasAuthCookie) {
+        setDemoMode(true);
+        setLoading(false);
+        setUser({ email: `${demoRole}@demo.vtsvision.com` } as User);
+        return;
+      }
+
       try {
         const supabase = getSupabaseClient();
         const { data } = await supabase.auth.getSession();
