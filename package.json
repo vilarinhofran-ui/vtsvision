@@ -1,0 +1,15 @@
+{
+  "name": "vts-vision-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace @vts/web",
+    "dev:api": "npm run start:dev --workspace @vts/api",
+    "build": "npm run build --workspace @vts/web && npm run build --workspace @vts/api",
+    "lint": "npm run lint --workspace @vts/web && npm run lint --workspace @vts/api"
+  }
+}

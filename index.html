@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VTS Vision - Navegacao Simples</title>
+    <style>
+      :root {
+        --bg: #f3f8ff;
+        --card: #ffffff;
+        --text: #0f172a;
+        --muted: #475569;
+        --line: #dbeafe;
+        --brand: #009dff;
+        --brand-dark: #003c8f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 90% -5%, #d9efff 0%, transparent 36%),
+          radial-gradient(circle at -10% 20%, #e7f2ff 0%, transparent 40%),
+          var(--bg);
+      }
+
+      .wrap {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 28px 20px 36px;
+      }
+
+      .hero {
+        background: linear-gradient(130deg, #003c8f, #009dff);
+        border-radius: 16px;
+        padding: 22px;
+        color: #fff;
+        box-shadow: 0 12px 28px rgba(0, 60, 143, 0.25);
+      }
+
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(1.45rem, 2.4vw, 2rem);
+      }
+
+      .hero p {
+        margin: 10px 0 0;
+        color: rgba(255, 255, 255, 0.92);
+        line-height: 1.45;
+      }
+
+      .panel {
+        margin-top: 16px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 16px;
+      }
+
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .row label {
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .row input {
+        flex: 1 1 320px;
+        min-width: 260px;
+        border: 1px solid #bfdbfe;
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 0.96rem;
+      }
+
+      .hint {
+        margin-top: 8px;
+        font-size: 0.86rem;
+        color: var(--muted);
+      }
+
+      h2 {
+        margin: 22px 0 10px;
+        font-size: 1.15rem;
+        color: var(--brand-dark);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 12px;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 14px;
+      }
+
+      .card h3 {
+        margin: 0 0 6px;
+        font-size: 1rem;
+      }
+
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+        line-height: 1.42;
+      }
+
+      .actions {
+        margin-top: 12px;
+      }
+
+      .btn {
+        border: 0;
+        border-radius: 999px;
+        background: var(--brand);
+        color: #fff;
+        padding: 9px 14px;
+        font-size: 0.9rem;
+        cursor: pointer;
+      }
+
+      .btn.secondary {
+        background: #e2e8f0;
+        color: #0f172a;
+      }
+
+      .flow {
+        margin: 8px 0 0;
+        padding-left: 20px;
+        color: var(--muted);
+      }
+
+      .flow li {
+        margin-bottom: 8px;
+        line-height: 1.4;
+      }
+
+      .badge {
+        display: inline-block;
+        margin-bottom: 8px;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: #e0f2fe;
+        color: #075985;
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+
+      @media (max-width: 720px) {
+        .wrap {
+          padding: 16px;
+        }
+
+        .hero {
+          border-radius: 12px;
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="hero">
+        <h1>VTS Vision - Mapa de Paginas</h1>
+        <p>
+          Navegacao simples e didatica para acessar modulos e funcoes do
+          sistema. Defina a URL base e clique em "Abrir modulo".
+        </p>
+      </section>
+
+      <section class="panel" aria-label="Configuracao de URL base">
+        <div class="row">
+          <label for="baseUrl">URL base:</label>
+          <input
+            id="baseUrl"
+            value="http://localhost:3000"
+            placeholder="http://localhost:3000"
+          />
+          <button class="btn secondary" id="resetBase" type="button">
+            Resetar
+          </button>
+        </div>
+        <p class="hint">
+          Dica: se o frontend estiver em outra porta, ajuste aqui.
+        </p>
+      </section>
+
+      <h2>Fluxo recomendado (didatico)</h2>
+      <section class="panel">
+        <ol class="flow">
+          <li>Home Page inicial.</li>
+          <li>Cadastro da conta.</li>
+          <li>Diagnostico inicial.</li>
+          <li>Login e criar conta.</li>
+          <li>Analise no dashboard.</li>
+          <li>Panel/Shell operacional.</li>
+        </ol>
+      </section>
+
+      <h2>Paginas e modulos</h2>
+      <section class="grid" id="routes"></section>
+    </main>
+
+    <script>
+      const routes = [
+        {
+          name: "Home Page",
+          path: "/",
+          tag: "Entrada",
+          description:
+            "Tela principal com visao geral e entrada da plataforma.",
+        },
+        {
+          name: "Cadastro",
+          path: "/cadastro",
+          tag: "Conta",
+          description: "Criacao da conta com dados da empresa.",
+        },
+        {
+          name: "Diagnostico",
+          path: "/diagnostico",
+          tag: "IA",
+          description: "Preencher dados e gerar resultado imediato.",
+        },
+        {
+          name: "Login / Criar Conta",
+          path: "/login",
+          tag: "Conta",
+          description: "Acesso autenticado e atalho para criar conta nova.",
+        },
+        {
+          name: "Dashboard",
+          path: "/dashboard",
+          tag: "Analise",
+          description: "KPIs, graficos e monitoramento operacional.",
+        },
+        {
+          name: "Panel / Shell",
+          path: "/dashboard",
+          tag: "Core",
+          description:
+            "Painel central para operar funcoes e modulos da plataforma.",
+        },
+      ];
+
+      const routesContainer = document.getElementById("routes");
+      const baseUrlInput = document.getElementById("baseUrl");
+      const resetBaseButton = document.getElementById("resetBase");
+
+      function getBaseUrl() {
+        const raw = (baseUrlInput.value || "").trim();
+        if (!raw) return "http://localhost:3000";
+        return raw.endsWith("/") ? raw.slice(0, -1) : raw;
+      }
+
+      function openRoute(path) {
+        const url = getBaseUrl() + path;
+        window.open(url, "_blank", "noopener,noreferrer");
+      }
+
+      routes.forEach((route) => {
+        const card = document.createElement("article");
+        card.className = "card";
+        card.innerHTML = `
+          <span class="badge">${route.tag}</span>
+          <h3>${route.name}</h3>
+          <p>${route.description}</p>
+          <div class="actions">
+            <button type="button" class="btn">Abrir modulo</button>
+          </div>
+        `;
+
+        const button = card.querySelector("button");
+        button.addEventListener("click", () => openRoute(route.path));
+        routesContainer.appendChild(card);
+      });
+
+      resetBaseButton.addEventListener("click", () => {
+        baseUrlInput.value = "http://localhost:3000";
+      });
+    </script>
+  </body>
+</html>

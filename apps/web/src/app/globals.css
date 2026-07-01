@@ -1,0 +1,290 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #eef5ff;
+  --surface: #ffffff;
+  --surface-soft: #f8fbff;
+  --text: #0f172a;
+  --muted: #5a6a84;
+  --primary: #009dff;
+  --primary-dark: #003c8f;
+  --line: rgba(0, 82, 180, 0.14);
+  --line-strong: rgba(0, 82, 180, 0.22);
+  --shadow-sm: 0 10px 24px rgba(1, 42, 108, 0.08);
+  --shadow-md: 0 18px 44px rgba(1, 42, 108, 0.14);
+  --shadow-lg: 0 26px 60px rgba(1, 42, 108, 0.2);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  background:
+    radial-gradient(
+      circle at 10% 0%,
+      rgba(0, 157, 255, 0.18) 0%,
+      rgba(0, 157, 255, 0) 50%
+    ),
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(0, 60, 143, 0.14) 0%,
+      rgba(0, 60, 143, 0) 45%
+    ),
+    var(--bg);
+  font-family: Inter, sans-serif;
+  letter-spacing: -0.01em;
+  line-height: 1.45;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0, 157, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 157, 255, 0.08) 1px, transparent 1px),
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(0, 157, 255, 0.12),
+      transparent 42%
+    ),
+    radial-gradient(circle at 80% 70%, rgba(0, 60, 143, 0.14), transparent 45%);
+  background-size:
+    42px 42px,
+    42px 42px,
+    auto,
+    auto;
+  z-index: -2;
+  animation: vtsGridShift 24s linear infinite;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  pointer-events: none;
+  background: conic-gradient(
+    from 40deg,
+    rgba(0, 157, 255, 0.12),
+    rgba(0, 60, 143, 0.04),
+    rgba(0, 157, 255, 0.12)
+  );
+  filter: blur(72px);
+  z-index: -3;
+  animation: vtsGlowOrbit 30s ease-in-out infinite;
+}
+
+@keyframes vtsGridShift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(-16px, -12px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes vtsGlowOrbit {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.08);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+.vts-glass {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.86),
+    rgba(243, 250, 255, 0.74)
+  );
+  backdrop-filter: blur(14px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: var(--shadow-sm);
+}
+
+.vts-card {
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, #fff 0%, var(--surface-soft) 100%);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.vts-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--line-strong);
+}
+
+.vts-title {
+  font-family: Poppins, sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.vts-logo-frame {
+  border-radius: 14px;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.92),
+    rgba(236, 246, 255, 0.86)
+  );
+  border: 1px solid rgba(0, 157, 255, 0.26);
+  box-shadow: 0 14px 34px rgba(0, 60, 143, 0.16);
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+input,
+select,
+textarea {
+  border: 1px solid var(--line);
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: rgba(0, 157, 255, 0.45);
+  box-shadow:
+    0 0 0 3px rgba(0, 157, 255, 0.16),
+    0 1px 0 rgba(255, 255, 255, 0.9) inset;
+}
+
+button,
+a {
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease,
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+button:hover,
+a:hover {
+  transform: translateY(-1px);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  border: 2px solid #edf3ff;
+  background: linear-gradient(180deg, #009dff, #006fd5);
+}
+
+::-webkit-scrollbar-track {
+  background: #edf3ff;
+}
+
+@media (max-width: 768px) {
+  .vts-card {
+    border-radius: 16px;
+  }
+
+  .vts-logo-frame {
+    border-radius: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.module-shell {
+  position: relative;
+}
+
+.module-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 28px;
+  opacity: 0.85;
+}
+
+.module-panel {
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.module-login::before {
+  background:
+    radial-gradient(
+      circle at 12% 14%,
+      rgba(0, 157, 255, 0.22),
+      transparent 46%
+    ),
+    radial-gradient(circle at 86% 82%, rgba(0, 60, 143, 0.2), transparent 42%);
+}
+
+.module-login .module-panel {
+  border-color: rgba(0, 106, 207, 0.28);
+}
+
+.module-cadastro::before {
+  background:
+    radial-gradient(circle at 90% 0%, rgba(0, 157, 255, 0.18), transparent 46%),
+    radial-gradient(circle at 5% 86%, rgba(0, 60, 143, 0.16), transparent 44%);
+}
+
+.module-cadastro .module-panel {
+  border-color: rgba(0, 96, 190, 0.26);
+}
+
+.module-diagnostico::before {
+  background:
+    radial-gradient(circle at 80% 12%, rgba(7, 182, 215, 0.2), transparent 44%),
+    radial-gradient(circle at 12% 78%, rgba(0, 60, 143, 0.16), transparent 46%);
+}
+
+.module-diagnostico .module-panel {
+  border-color: rgba(3, 143, 188, 0.28);
+}
+
+.module-dashboard::before {
+  background:
+    radial-gradient(circle at 86% 10%, rgba(0, 157, 255, 0.2), transparent 42%),
+    radial-gradient(circle at 10% 75%, rgba(0, 60, 143, 0.18), transparent 46%);
+}
+
+.module-dashboard .vts-glass {
+  border-color: rgba(0, 105, 201, 0.26);
+}

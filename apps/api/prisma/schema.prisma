@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model DatasetUpload {
+  id        String   @id @default(cuid())
+  customerId String
+  source    String
+  fileName  String
+  rowCount  Int
+  rows      Json
+  createdAt DateTime @default(now())
+
+  @@index([customerId])
+}
