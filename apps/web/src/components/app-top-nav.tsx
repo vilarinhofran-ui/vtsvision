@@ -35,14 +35,28 @@ export function AppTopNav({ userEmail, onSignOut }: AppTopNavProps) {
         <p className="text-sm font-semibold text-slate-600">
           Conta ativa: {userEmail ?? "usuario autenticado"}
         </p>
-        {onSignOut && (
-          <button
-            onClick={onSignOut}
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700"
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-xl border border-[#009DFF] bg-white px-4 py-2 text-sm font-semibold text-[#003C8F]"
           >
-            <LogOut size={14} /> Sair
-          </button>
-        )}
+            Pagina inicial
+          </Link>
+          <Link
+            href="/login"
+            className="inline-flex items-center gap-2 rounded-xl border border-[#003C8F] bg-[#003C8F] px-4 py-2 text-sm font-semibold text-white"
+          >
+            Logar
+          </Link>
+          {onSignOut && (
+            <button
+              onClick={onSignOut}
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700"
+            >
+              <LogOut size={14} /> Sair
+            </button>
+          )}
+        </div>
       </section>
 
       <nav className="flex flex-wrap gap-2">

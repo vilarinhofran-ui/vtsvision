@@ -183,7 +183,7 @@ export default function HomePage() {
               href="/login"
               className="rounded-full border border-[#009DFF] bg-white px-5 py-2 text-sm font-semibold text-[#003C8F]"
             >
-              Entrar
+              Logar
             </Link>
           </div>
         </div>
